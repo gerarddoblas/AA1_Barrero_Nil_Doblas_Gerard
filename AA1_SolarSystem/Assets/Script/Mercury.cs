@@ -25,6 +25,7 @@ public class Mercury : MonoBehaviour
     {
         position = initialPosition;
         velocity = initialVelocity;
+        accelleration = CalculateAcceleration(position);
 
         transform.position = position;
     }
@@ -32,8 +33,10 @@ public class Mercury : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        accelleration = CalculateAcceleration(position);
+        
         (position, velocity, time) = RungeKutta4(position, velocity, time);
+
+        (position, velocity, accelleration, time) = VerletMethod(position, velocity, accelleration, time);
 
         transform.position = position;
     }
@@ -69,5 +72,15 @@ public class Mercury : MonoBehaviour
         time += stepTime;
 
         return (newPosition, newVelocity, time);
+    }
+
+    (Vector2, Vector2, Vector2, float) VerletMethod(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
+    {
+        Vector2 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
+        Vector2 newAcceleration = CalculateAcceleration(newPosition);
+        Vector2 newVelocity = velocity + 0.5f * (acceleration + newAcceleration) * stepTime;
+        time += stepTime;
+
+        return (newPosition, newVelocity, newAcceleration, time);
     }
 }
