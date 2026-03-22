@@ -2,6 +2,15 @@ using UnityEngine;
 
 public class Mercury : MonoBehaviour
 {
+    public enum SimulationMethod
+    {
+        RungeKutta4,
+        Verlet
+    }
+
+    [Header("Simulation")]
+    public SimulationMethod method = SimulationMethod.RungeKutta4;
+
     [Header("Earth properties")]
 
     private Vector2 position;
@@ -23,17 +32,51 @@ public class Mercury : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        position = initialPosition;
-        velocity = initialVelocity;
-
-        transform.position = position;
+        ResetSimulation();
     }
 
     // Update is called once per frame
     void Update()
     {
-        accelleration = CalculateAcceleration(position);
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ChangeMethod();
+        }
+        if (method == SimulationMethod.RungeKutta4)
+        {
+            (position, velocity, time) = RungeKutta4(position, velocity, time);
+        }
+        else
+        {
+            (position, velocity, accelleration, time) =
+                VerletMethod(position, velocity, accelleration, time);
+        }
+
+        transform.position = position;
+
         (position, velocity, time) = RungeKutta4(position, velocity, time);
+
+        (position, velocity, accelleration, time) = VerletMethod(position, velocity, accelleration, time);
+
+        transform.position = position;
+    }
+
+    void ChangeMethod()
+    {
+        if (method == SimulationMethod.RungeKutta4)
+            method = SimulationMethod.Verlet;
+        else
+            method = SimulationMethod.RungeKutta4;
+
+        ResetSimulation();
+    }
+
+    void ResetSimulation()
+    {
+        position = initialPosition;
+        velocity = initialVelocity;
+        accelleration = CalculateAcceleration(position);
+        time = 0;
 
         transform.position = position;
     }
@@ -69,5 +112,22 @@ public class Mercury : MonoBehaviour
         time += stepTime;
 
         return (newPosition, newVelocity, time);
+    }
+
+    (Vector2, Vector2, Vector2, float) VerletMethod(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
+    {
+        Vector2 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
+        Vector2 newAcceleration = CalculateAcceleration(newPosition);
+        Vector2 newVelocity = velocity + 0.5f * (acceleration + newAcceleration) * stepTime;
+        time += stepTime;
+
+        return (newPosition, newVelocity, newAcceleration, time);
+    }
+
+    void OnGUI()
+    {
+        string methodName = (method == SimulationMethod.RungeKutta4) ? "Runge-Kutta 4" : "Verlet";
+
+        GUI.Label(new Rect(10, 10, 200, 30), "Method: " + methodName);
     }
 }
