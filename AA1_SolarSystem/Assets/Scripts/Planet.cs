@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Planet : MonoBehaviour
 {
@@ -20,6 +21,17 @@ public class Planet : MonoBehaviour
     public float totalTime = 100;
     private float time = 0;
     public float stepTime = 0.01f;
+    public float minStepTime = 0.01f;
+    public float maxStepTime = 0.1f;
+    public float stepMultiplier = 0.5f;
+
+    private float energy;
+
+    public bool showEnergy = false;
+
+    public TextMeshProUGUI methodText;
+    public TextMeshProUGUI energyText;
+    public TextMeshProUGUI stepText;
 
     [Header("Simulation")]
     public SimulationMethod method = SimulationMethod.RungeKutta4;
@@ -42,6 +54,18 @@ public class Planet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            stepTime *= stepMultiplier;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            stepTime /= stepMultiplier;
+        }
+
+        stepTime = Mathf.Clamp(stepTime, minStepTime, maxStepTime);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             ChangeMethod();
@@ -58,13 +82,24 @@ public class Planet : MonoBehaviour
 
         transform.position = position;
 
-        if (time < totalTime)
-        {
-            accelleration = CalculateAcceleration(position);
-            (position, velocity, time) = RungeKutta4(position, velocity, time);
+        energy = CalculateEnergy(position, velocity);
 
-            transform.position = position;
+        if (method == SimulationMethod.RungeKutta4)
+            methodText.text = "Method: Runge-Kutta 4";
+        else
+            methodText.text = "Method: Verlet";
+
+        if (showEnergy)
+        {
+            energyText.text = "Energy: " + energy.ToString("F4");
+
+            if (method == SimulationMethod.RungeKutta4)
+                methodText.text = "Method: Runge-Kutta 4";
+            else
+                methodText.text = "Method: Verlet";
         }
+
+        stepText.text = "StepTime: " + stepTime.ToString("F3");
     }
     void ChangeMethod()
     {
@@ -126,11 +161,15 @@ public class Planet : MonoBehaviour
 
         return (newPosition, newVelocity, newAcceleration, time);
     }
-    void OnGUI()
+
+    float CalculateEnergy(Vector3 position, Vector3 velocity)
     {
-        string methodName = (method == SimulationMethod.RungeKutta4) ? "Runge-Kutta 4" : "Verlet";
+        float cinetic = 0.5f * (velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
 
-        GUI.Label(new Rect(10, 10, 200, 30), "Method: " + methodName);
+        float distance = Mathf.Sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
+
+        float potential = -sun.mass / distance;
+
+        return cinetic + potential;
     }
-
 }
