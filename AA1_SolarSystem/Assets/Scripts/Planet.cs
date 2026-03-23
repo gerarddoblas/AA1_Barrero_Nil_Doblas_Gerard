@@ -117,11 +117,11 @@ public class Planet : MonoBehaviour
 
         return (newPosition, newVelocity, time);
     }
-    (Vector2, Vector2, Vector2, float) VerletMethod(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
+    (Vector3, Vector3, Vector3, float) VerletMethod(Vector3 position, Vector3 velocity, Vector3 acceleration, float time)
     {
-        Vector2 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
-        Vector2 newAcceleration = CalculateAcceleration(newPosition);
-        Vector2 newVelocity = velocity + 0.5f * (acceleration + newAcceleration) * stepTime;
+        Vector3 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
+        Vector3 newAcceleration = CalculateAcceleration(newPosition);
+        Vector3 newVelocity = velocity + 0.5f * (acceleration + newAcceleration) * stepTime;
         time += stepTime;
 
         return (newPosition, newVelocity, newAcceleration, time);
