@@ -1,40 +1,44 @@
 using UnityEngine;
 
-public class Mercury : MonoBehaviour
+public class Planet : MonoBehaviour
 {
-    public enum SimulationMethod
-    {
-        RungeKutta4,
-        Verlet
-    }
+    [Header("References")]
+    public SunData sun;
 
-    [Header("Simulation")]
-    public SimulationMethod method = SimulationMethod.RungeKutta4;
+    [Header("Planet properties")]
 
-    [Header("Earth properties")]
-
-    private Vector2 position;
-    private Vector2 velocity;
-    private Vector2 accelleration;
+    private Vector3 position;
+    private Vector3 velocity;
+    private Vector3 accelleration;
 
     [Header("Dynamics setup")]
 
-    private float gravityMassConstant = 39.478f;//1.66f * Mathf.Pow(10, -7);
-    public Vector2 initialPosition = new Vector2(0.39f, 0);
-    public Vector2 initialVelocity = new Vector2(0, 10.07f);
+    public Vector3 initialPosition;
+    public Vector3 initialVelocity;
 
 
     public float totalTime = 100;
     private float time = 0;
     public float stepTime = 0.01f;
 
+    [Header("Simulation")]
+    public SimulationMethod method = SimulationMethod.RungeKutta4;
+
+    public enum SimulationMethod
+    {
+        RungeKutta4,
+        Verlet
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ResetSimulation();
-    }
+        position = initialPosition;
+        velocity = initialVelocity;
 
+        transform.position = position;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -54,13 +58,14 @@ public class Mercury : MonoBehaviour
 
         transform.position = position;
 
-        (position, velocity, time) = RungeKutta4(position, velocity, time);
+        if (time < totalTime)
+        {
+            accelleration = CalculateAcceleration(position);
+            (position, velocity, time) = RungeKutta4(position, velocity, time);
 
-        (position, velocity, accelleration, time) = VerletMethod(position, velocity, accelleration, time);
-
-        transform.position = position;
+            transform.position = position;
+        }
     }
-
     void ChangeMethod()
     {
         if (method == SimulationMethod.RungeKutta4)
@@ -70,7 +75,6 @@ public class Mercury : MonoBehaviour
 
         ResetSimulation();
     }
-
     void ResetSimulation()
     {
         position = initialPosition;
@@ -81,21 +85,21 @@ public class Mercury : MonoBehaviour
         transform.position = position;
     }
 
-    Vector2 CalculateAcceleration(Vector2 position)
+    Vector3 CalculateAcceleration(Vector3 position)
     {
-        Vector2 newAcceleration;
+        Vector3 newAcceleration;
 
         float distanceSquared = position.magnitude * position.magnitude;
-        Vector2 unitVecor = position.normalized;
-        newAcceleration = -(gravityMassConstant / distanceSquared) * unitVecor;
+        Vector3 unitVecor = position.normalized;
+        newAcceleration = -(sun.mass / distanceSquared) * unitVecor;
         return newAcceleration;
     }
 
-    (Vector2, Vector2, float) RungeKutta4(Vector2 position, Vector2 velocity, float time)
+    (Vector3, Vector3, float) RungeKutta4(Vector3 position, Vector3 velocity, float time)
     {
-        Vector2 K1p, K1v, K2p, K2v, K3p, K3v, K4p, K4v;
+        Vector3 K1p, K1v, K2p, K2v, K3p, K3v, K4p, K4v;
 
-        Vector2 newPosition, newVelocity;
+        Vector3 newPosition, newVelocity;
 
         K1p = velocity;
         K1v = CalculateAcceleration(position);
@@ -113,7 +117,6 @@ public class Mercury : MonoBehaviour
 
         return (newPosition, newVelocity, time);
     }
-
     (Vector2, Vector2, Vector2, float) VerletMethod(Vector2 position, Vector2 velocity, Vector2 acceleration, float time)
     {
         Vector2 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
@@ -123,11 +126,11 @@ public class Mercury : MonoBehaviour
 
         return (newPosition, newVelocity, newAcceleration, time);
     }
-
     void OnGUI()
     {
         string methodName = (method == SimulationMethod.RungeKutta4) ? "Runge-Kutta 4" : "Verlet";
 
         GUI.Label(new Rect(10, 10, 200, 30), "Method: " + methodName);
     }
+
 }
