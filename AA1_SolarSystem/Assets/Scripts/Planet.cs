@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Planet : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class Planet : MonoBehaviour
 
     private Vector3 position;
     private Vector3 velocity;
-    private Vector3 accelleration;
+    private Vector3 acceleration;
 
     [Header("Dynamics setup")]
 
@@ -19,7 +20,19 @@ public class Planet : MonoBehaviour
 
     public float totalTime = 100;
     private float time = 0;
+
     public float stepTime = 0.01f;
+    public float minStepTime = 0.01f;
+    public float maxStepTime = 0.1f;
+    public float stepMultiplier = 0.2f;
+
+    private float energy;
+
+    public bool showEnergy = false;
+
+    public TextMeshProUGUI methodText;
+    public TextMeshProUGUI energyText;
+    public TextMeshProUGUI stepText;
 
     [Header("Simulation")]
     public SimulationMethod method = SimulationMethod.RungeKutta4;
@@ -33,39 +46,70 @@ public class Planet : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //inicia la simulacion
         ResetSimulation();
+
         position = initialPosition;
         velocity = initialVelocity;
 
         transform.position = position;
     }
+
     // Update is called once per frame
     void Update()
     {
+        //control de la velocidad con flechas
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            stepTime *= stepMultiplier;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            stepTime /= stepMultiplier;
+        }
+
+        //cambiar de metodo con 'E'
+        stepTime = Mathf.Clamp(stepTime, minStepTime, maxStepTime);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             ChangeMethod();
         }
-        if (method == SimulationMethod.RungeKutta4)
+        for (int i = 0; i < 1; i++)
         {
-            (position, velocity, time) = RungeKutta4(position, velocity, time);
-        }
-        else
-        {
-            (position, velocity, accelleration, time) =
-                VerletMethod(position, velocity, accelleration, time);
+            if (method == SimulationMethod.RungeKutta4)
+            {
+                (position, velocity, time) = RungeKutta4(position, velocity, time);
+            }
+            else
+            {
+                (position, velocity, acceleration, time) = Verlet(position, velocity, acceleration, time);
+            }
         }
 
+        //actualiza la posicion del objeto en unity
         transform.position = position;
 
-        if (time < totalTime)
-        {
-            accelleration = CalculateAcceleration(position);
-            (position, velocity, time) = RungeKutta4(position, velocity, time);
+        //calculamos la energia total
+        energy = CalculateEnergy(position, velocity);
 
-            transform.position = position;
+        //mostrar que método esta activo
+        if (method == SimulationMethod.RungeKutta4)
+            methodText.text = "Method: Runge-Kutta 4";
+        else
+            methodText.text = "Method: Verlet";
+
+
+        //mostrar energia
+        if (showEnergy)
+        {
+            energyText.text = "Energy: " + energy.ToString("F4");
         }
+
+        stepText.text = "StepTime: " + stepTime.ToString("F3");
     }
+    //cambiamos entre RK4 o verlet
     void ChangeMethod()
     {
         if (method == SimulationMethod.RungeKutta4)
@@ -75,16 +119,24 @@ public class Planet : MonoBehaviour
 
         ResetSimulation();
     }
+
+    //reinicia la simulacion
     void ResetSimulation()
     {
         position = initialPosition;
         velocity = initialVelocity;
-        accelleration = CalculateAcceleration(position);
+
+        //calculamos aceleracion inicial (verlet)
+        acceleration = CalculateAcceleration(position);
+
         time = 0;
+
+        stepTime = minStepTime;//reiniciamos velocidad simulacion
 
         transform.position = position;
     }
 
+    //calculamos aceleracion gravitatoria
     Vector3 CalculateAcceleration(Vector3 position)
     {
         Vector3 newAcceleration;
@@ -95,6 +147,7 @@ public class Planet : MonoBehaviour
         return newAcceleration;
     }
 
+    //RK4
     (Vector3, Vector3, float) RungeKutta4(Vector3 position, Vector3 velocity, float time)
     {
         Vector3 K1p, K1v, K2p, K2v, K3p, K3v, K4p, K4v;
@@ -117,7 +170,9 @@ public class Planet : MonoBehaviour
 
         return (newPosition, newVelocity, time);
     }
-    (Vector3, Vector3, Vector3, float) VerletMethod(Vector3 position, Vector3 velocity, Vector3 acceleration, float time)
+
+    //Verlet
+    (Vector3, Vector3, Vector3, float) Verlet(Vector3 position, Vector3 velocity, Vector3 acceleration, float time)
     {
         Vector3 newPosition = position + velocity * stepTime + 0.5f * acceleration * stepTime * stepTime;
         Vector3 newAcceleration = CalculateAcceleration(newPosition);
@@ -126,11 +181,19 @@ public class Planet : MonoBehaviour
 
         return (newPosition, newVelocity, newAcceleration, time);
     }
-    void OnGUI()
+
+    //energia total
+    float CalculateEnergy(Vector3 position, Vector3 velocity)
     {
-        string methodName = (method == SimulationMethod.RungeKutta4) ? "Runge-Kutta 4" : "Verlet";
+        //energia cinetica
+        float cinetic = 0.5f * (velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
 
-        GUI.Label(new Rect(10, 10, 200, 30), "Method: " + methodName);
+        //distancia sol
+        float distance = Mathf.Sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
+
+        //energia potencial
+        float potential = -sun.mass / distance;
+
+        return cinetic + potential;
     }
-
 }
