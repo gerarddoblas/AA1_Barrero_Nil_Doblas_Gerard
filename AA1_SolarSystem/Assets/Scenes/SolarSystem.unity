@@ -184,6 +184,10 @@ PrefabInstance:
       value: Saturn
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
       objectReference: {fileID: 427067471}
@@ -875,6 +879,10 @@ PrefabInstance:
       value: Jupiter
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
       objectReference: {fileID: 427067471}
@@ -1132,6 +1140,10 @@ PrefabInstance:
       value: Neptun
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
       objectReference: {fileID: 427067471}
@@ -1265,6 +1277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Urano
       objectReference: {fileID: 0}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
@@ -1487,6 +1503,10 @@ PrefabInstance:
       value: Venus
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
       objectReference: {fileID: 427067471}
@@ -1708,6 +1728,10 @@ PrefabInstance:
       value: Mart
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
       objectReference: {fileID: 427067471}
@@ -1780,6 +1804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mercury
       objectReference: {fileID: 0}
+    - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
+      propertyPath: stepText
+      value: 
+      objectReference: {fileID: 881793264}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: energyText
       value: 
