@@ -201,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -942,7 +942,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -1126,7 +1126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -1237,7 +1237,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -1387,7 +1387,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -1634,7 +1634,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -1861,7 +1861,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.909804, g: 0.70980394, b: 0.38431376, a: 1}
-  m_Intensity: 8
+  m_Intensity: 10
   m_Range: 500
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1997,7 +1997,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime
@@ -2114,7 +2114,7 @@ PrefabInstance:
       objectReference: {fileID: 1540559339}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: maxStepTime
-      value: 0.001
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5996614916268400855, guid: 1856fab481c9dbd40975f4d38964be66, type: 3}
       propertyPath: minStepTime

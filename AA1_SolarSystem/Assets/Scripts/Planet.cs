@@ -21,11 +21,11 @@ public class Planet : MonoBehaviour
     public float totalTime = 100;
     private float time = 0;
 
-    public float stepTime = 0.0001f;
+    public float stepTime = 0.001f;
     public float minStepTime = 0.0001f;
-    public float maxStepTime = 0.001f;
-    public float stepMultiplier = 0.2f;
-    public float stepsByFrame = 1f;
+    public float maxStepTime = 0.005f;
+
+    
 
     private float energy;
 
@@ -50,9 +50,6 @@ public class Planet : MonoBehaviour
         //inicia la simulacion
         ResetSimulation();
 
-        position = initialPosition;
-        velocity = initialVelocity;
-
         transform.position = position;
     }
 
@@ -62,31 +59,31 @@ public class Planet : MonoBehaviour
         //control de la velocidad con flechas
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            stepTime *= stepMultiplier;
+            stepTime *= 2f;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            stepTime /= stepMultiplier;
+            stepTime *= 0.5f;
         }
 
-        //cambiar de metodo con 'E'
         stepTime = Mathf.Clamp(stepTime, minStepTime, maxStepTime);
-        stepsByFrame = Mathf.Max(1, Mathf.RoundToInt(stepTime / minStepTime));
+
+        //cambiar de metodo con 'E'
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             ChangeMethod();
         }
-        for (int i = 0; i < stepsByFrame; i++)
+
+        if (method == SimulationMethod.RungeKutta4)
         {
-            if (method == SimulationMethod.RungeKutta4)
-            {
-                (position, velocity, time) = RungeKutta4(position, velocity, time);
-            }
-            else
-            {
-                (position, velocity, acceleration, time) = Verlet(position, velocity, acceleration, time);
-            }
+            (position, velocity, time) = RungeKutta4(position, velocity, time);
+        }
+        else
+        {
+            (position, velocity, acceleration, time) =
+                Verlet(position, velocity, acceleration, time);
         }
 
         //actualiza la posicion del objeto en unity
@@ -105,7 +102,7 @@ public class Planet : MonoBehaviour
         //mostrar energia
         if (showEnergy)
         {
-            energyText.text = "Energy: " + energy.ToString("F4");
+            energyText.text = "Energy: " + energy.ToString("F5");
         }
 
         stepText.text = "StepTime: " + stepTime.ToString("F5");
@@ -126,13 +123,9 @@ public class Planet : MonoBehaviour
     {
         position = initialPosition;
         velocity = initialVelocity;
-
-        //calculamos aceleracion inicial (verlet)
         acceleration = CalculateAcceleration(position);
 
         time = 0;
-
-        stepTime = minStepTime;//reiniciamos velocidad simulacion
 
         transform.position = position;
     }
